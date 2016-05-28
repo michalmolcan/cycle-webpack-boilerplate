@@ -1,6 +1,6 @@
 import xs             from 'xstream';
 import navbar         from './dialogue/components/navbar/navbar-index'
-import contentRouter  from './dialogue/components/content-router/content-router-index'
+import contentRouter  from './dialogue/components/component-router/component-router'
 // @cycle/dom has a hyperscript-helper built in so you can
 // declare all html elements you are going to use like div, h1, h2, nav etc
 import {div}    from '@cycle/dom'
@@ -20,8 +20,9 @@ const view = (navbar, content) => {
 function main(sources) {
 
   const Content = contentRouter(sources);
-  const Nav = navbar(sources);
-  const Props = Content.Props;
+  
+  const {path$, state$} = Content;
+  const Nav = navbar(sources, path$);
 
   const view$ = xs.of(
     view(
@@ -32,8 +33,7 @@ function main(sources) {
 
   return {
     DOM: view$,
-    History: Nav.url$,
-    Props: Props,
+    state$: state$.startWith({counter:0})
   }
 };
 
