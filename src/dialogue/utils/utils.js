@@ -1,4 +1,5 @@
 import Rx from 'rx'
+import {forEach} from 'ramda'
 
 const getUrl = event => event.target.href.replace(location.origin, ``);
 
@@ -10,7 +11,16 @@ const events = (selector, _events) => {
   )
 };
 
+const requireSources = (componentName, sources, ...sourcesNames) => {
+  forEach(n => {
+    if (!sources[n]) {
+      throw new Error(`${componentName} must have ${n} specified`)
+    }
+  }, sourcesNames)
+}
+
 export {
+  requireSources,
   getUrl,
   extractValue,
   events,

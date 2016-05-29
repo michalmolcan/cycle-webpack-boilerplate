@@ -1,4 +1,4 @@
-import Rx   from 'rx'
+import xs   from 'xstream';
 import view from './page2-view'
 
 const Page2 = (sources) => {
@@ -6,7 +6,7 @@ const Page2 = (sources) => {
   const $view = view(props$);
 
   return {
-    DOM: Rx.Observable.just($view),
+    DOM: xs.of($view),
     Props: props$,
   }
 };
