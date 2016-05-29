@@ -34,7 +34,7 @@ const routes = {
 // variables. We return all of this in an Object with DOM + History
 function main(sources) {
   const Content = ComponentRouter({...sources, routes$: xs.of(routes)})
-  
+
   const {route$, pluck} = Content;
   const Nav = navbar(sources, route$);
 

@@ -1,17 +1,7 @@
-import Rx from 'rx'
-import {forEach} from 'ramda'
+import xs, {Stream} from 'xstream'
+import {forEach, map, propOr} from 'ramda'
 
-const getUrl = event => event.target.href.replace(location.origin, ``);
-
-const extractValue = (val, obs) => obs.map(obj => obj[val]); // return "/page1"
-
-const events = (selector, _events) => {
-  return Rx.Observable.merge(
-    _events.map(event => selector.events(event))
-  )
-};
-
-const requireSources = (componentName, sources, ...sourcesNames) => {
+export function requireSources (componentName, sources, ...sourcesNames) {
   forEach(n => {
     if (!sources[n]) {
       throw new Error(`${componentName} must have ${n} specified`)
@@ -19,9 +9,18 @@ const requireSources = (componentName, sources, ...sourcesNames) => {
   }, sourcesNames)
 }
 
-export {
-  requireSources,
-  getUrl,
-  extractValue,
-  events,
+export function isStream (stream) {
+  return stream instanceof Stream
+}
+
+const propOrNever = propOr(xs.never())
+
+export function mergeFlatten (key, children) {
+  return xs.merge(
+    ...map(child => isStream(child)
+        ? child.map(propOrNever(key)).flatten()
+        : propOrNever(key, child)
+      , children
+    )
+  )
 }

@@ -1,14 +1,15 @@
 import {h, div, ul, li, a, nav, h1, h2} from '@cycle/dom'
 
-function view (sources, path$) {
+function view (sources, route$) {
 
-  const {router: {createHref}} = sources;
+  const {router} = sources;
 
-  const homeHref = createHref('/')
-  const page1Href = createHref('/page1')
-  const page2tHref = createHref('/page2')
+  const homeHref = router.createHref('/')
+  const page1Href = router.createHref('/page1')
+  const page2tHref = router.createHref('/page2')
 
-  return path$.map(() => {
+  return route$
+    .map(() => {
 
     return div([
       h1('.brand-title', [`An APP`]),
